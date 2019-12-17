@@ -1,6 +1,7 @@
 use std::ffi::OsString;
 use std::fs;
 use std::io::BufRead;
+use std::path::Path;
 
 mod errors;
 
@@ -49,11 +50,35 @@ impl Source {
     }
 }
 
+#[derive(PartialEq)]
+pub enum Game {
+    TESV,
+    FO4,
+}
+
 pub struct ParserSession {
     src: Source,
+    game: Game,
 }
 
 impl ParserSession {
+    pub fn from_file(path: &str, game: Game) -> Result<Self, String> {
+        let path = Path::new(path);
+        if !path.is_file() {
+            return Err("Path is not a file.".to_string());
+        }
+        let filename = path.file_name().expect("Could not find file name.").to_owned();
+        let content = fs::read_to_string(path).map_err(|x| format!("{}", x))?;
+        let src = Source { filename, content };
+        Ok(Self { src, game })
+    }
+
+    pub fn from_string(script: &str, game: Game) -> Self {
+        let filename = OsString::from("<stdin>");
+        let src = Source { filename, content: script.to_string() };
+        Self { src, game }
+    }
+
     pub fn new_error(&self) -> errors::ErrorBuilder {
         errors::ErrorBuilder::new(self, true)
     }
