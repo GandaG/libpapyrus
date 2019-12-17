@@ -4,6 +4,9 @@ use std::io::BufRead;
 use std::path::Path;
 
 mod errors;
+mod lexer;
+
+pub use lexer::{KwKind, Lexer, LitKind, Token, TokenKind};
 
 struct Source {
     pub filename: OsString,

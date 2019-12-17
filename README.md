@@ -39,7 +39,7 @@ The current roadmap is below. Keep in mind this is subject to change during
 development.
 
 ### 🚀 Creating the formatter
-  1. ❌ Build the Lexer
+  1. ✔  Build the Lexer
   2. ❌ Build the Syntax Parser
   3. ❌ Create the *papyrusfmt* binary
 
